@@ -1,0 +1,9 @@
+Hi there {{ participant.first_name }}!
+
+This message confirms that you are registered for {{ event.name }} with A Wild
+Life. If you have any questions about the event or need to change your
+registration info, contact {{ event.contact_info.name }} at {{ event.contact_info.email }}.
+
+Thanks and see you on {{ event.start_time|nice_datetime('%A the {S}') }}!
+
+- A Wild Life

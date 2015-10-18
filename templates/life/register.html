@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block body %}
+    <br />
+    <div class="row">
+        <div class="large-10 small-12 large-centered columns">
+            <h1>Register for {{ event.name }}</h1>
+            <form action="{{ url('register', args=[event.slug]) }}" method="POST">
+                <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken" />
+                <div class="row">
+                    <div class="large-6 columns">
+                        {% if form.first_name.errors %}
+                            <label class="error"> First name
+                                <input type="text" class="error" name="first_name" />
+                            </label>
+                            {% for error in form.first_name.errors %}
+                                <small class="error">{{ error }}</small>
+                            {% endfor %}
+                        {% else %}
+                            <label> First name
+                                <input type="text" name="first_name" />
+                            </label>
+                        {% endif %}
+                    </div>
+                    <div class="large-6 columns">
+                        {% if form.last_name.errors %}
+                            <label class="error"> Last name
+                                <input type="text" class="error" name="last_name" />
+                            </label>
+                            {% for error in form.last_name.errors %}
+                                <small class="error">{{ error }}</small>
+                            {% endfor %}
+                        {% else %}
+                            <label> Last name
+                                <input type="text" name="last_name" />
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        {% if form.email.errors %}
+                            <label class="error"> Email
+                                <input type="text" class="error" name="email" />
+                            </label>
+                            {% for error in form.email.errors %}
+                                <small class="error">{{ error }}</small>
+                            {% endfor %}
+                        {% else %}
+                            <label> Email
+                                <input type="text" name="email" />
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label> &nbsp;
+                            <input type="submit" value="Go!" class="button expand radius success" />
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

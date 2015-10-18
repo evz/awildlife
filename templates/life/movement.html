@@ -3,7 +3,9 @@
     <br />
     <div class="row">
         <div class="large-9 small-12 columns">
-            <h1>Description of what this is all about</h1>
+            <h1>Movement classes</h1>
+            <p>Description of what this is all about</p>
+            <hr />
             {% for event in events %}
                 {% include 'partials/event_listing.html' %}
                 {% if not loop.last or loop.length == 1 %}

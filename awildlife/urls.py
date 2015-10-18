@@ -19,9 +19,7 @@ urlpatterns = [
     url(r'^about/$', TemplateView.as_view(template_name='life/about.html'), 
                     name='about'),
 
-    url(r'^event/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/(?P<slug>.*)/$', 
-                    views.event_detail, 
-                    name='event_detail'),
+    url(r'^register/(?P<event_slug>.*)/$', views.register, name='register'),
 
     url(r'^$', views.index, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

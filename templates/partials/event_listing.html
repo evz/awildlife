@@ -8,15 +8,13 @@
     </div>
 
     <div class="large-9 small-12 medium-9 columns">
-        <h5><a href="{{ url('event_detail',
-                            args=[event.start_time.year,
-                                  event.start_time.month,
-                                  event.start_time.day,
-                                  event.slug] ) }}">
-                {{ event.name }}
-            </a>
-        </h5>
+        <h5>{{ event.name }}</h5>
         <p>{{ event.description }}</p>
+        <p>
+            <a class="button tiny radius success" href="{{ url('register', args=[event.slug]) }}">
+                Register <i class="fi-check"> </i>
+            </a>
+        </p>
     </div>
 </div>
 
