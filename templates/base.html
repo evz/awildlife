@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+
+<html class="no-js" data-useragent=
+"Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>{% block title %}{% endblock %}</title>
+    <meta content="{{ meta_description }}" name="description">
+    <meta content="Natalie Evans" name="author">
+    <link rel="stylesheet" href="{{ static('css/foundation.min.css') }}" />
+    <link rel="stylesheet" href="{{ static('css/foundation-icons.css') }}" />
+    <link rel="stylesheet" href="{{ static('fonts/hutan_lestari.css') }}" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="{{ static('css/custom.css') }}" />
+    <script src="{{ static('js/modernizr.js') }}"></script>
+</head>
+
+<body>
+    {% block hero %}{% endblock %}
+    <div class="sticky">
+        <nav class="top-bar" data-topbar="">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="{{ url('index') }}">A Wild Life</a></h1>
+                </li>
+
+                <li class="toggle-topbar menu-icon">
+                    <a href="#"><span>menu</span></a>
+                </li>
+            </ul>
+
+            <section class="top-bar-section">
+                <ul class="right">
+                    <li class="divider"></li>
+
+                    <li>
+                        <h2>
+                            <a href="{{ url('movement') }}">Movement Classes</a>
+                        </h2>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li>
+                        <h2>
+                            <a href="{{ url('wild_foods') }}">Wild Foods</a>
+                        </h2>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li>
+                        <h2>
+                            <a href="{{ url('faqs') }}">FAQs</a>
+                        </h2>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li>
+                        <h2>
+                            <a href="{{ url('resources') }}">Resources</a>
+                        </h2>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li>
+                        <h2>
+                            <a href="{{ url('about') }}">About</a>
+                        </h2>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+    {% block body %}{% endblock %}
+    <div class="row">
+        <div class="large-12 columns">
+            <footer class="row">
+                <div class="large-12 columns">
+                    <hr>
+
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <p>&copy; Copyright Natalie Evans.</p>
+                        </div>
+
+                        <div class="large-6 small-12 columns">
+                            <ul class="inline-list right">
+                                <li>
+                                    <a href="{{ url('movement') }}">Movement Classes</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ url('wild_foods') }}">Wild Foods</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ url('faqs') }}">FAQs</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ url('resources') }}">Resources</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ url('about') }}">About</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="{{ static('js/jquery.js') }}"></script>
+    <script src="{{ static('js/foundation.min.js') }}"></script>
+    <script>
+        $(document).foundation();
+    </script>
+    {% block extra_javascript %}{% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block body %}
+    <br />
+    <div class="row">
+        <div class="large-9 small-12 columns">
+            <h1>Description of what this is all about</h1>
+            {% for event in events %}
+                {% include 'partials/event_listing.html' %}
+                {% if not loop.last or loop.length == 1 %}
+                    <hr />
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="large-3 hide-for-small columns">
+            <img src="http://lorempixel.com/300/600/cats" width="100%">
+        </div>
+    </div>
+{% endblock %}

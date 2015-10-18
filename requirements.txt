@@ -1,0 +1,7 @@
+Django==1.8.5
+psycopg2==2.6.1
+gunicorn==19.3.0
+pygeocoder==1.2.5
+jinja2==2.8
+pillow==3.0.0
+pytz==2015.6

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block hero %}
+    <section class="hero">
+        <div class="row intro">
+            <div class="large-12 columns">
+                <h1>A Wild Life</h1>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block body %}
+    <br />
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="row">
+                <div class="large-6 small-12 columns">
+                    <h3 class="text-center">Upcoming Classes</h3>
+                    <hr>
+                    {% for event in events %}
+                        {% include 'partials/event_listing.html' %}
+                        {% if not loop.last or loop.length == 1 %}
+                            <hr />
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="large-6 hide-for-medium-down columns">
+                    <img src="http://lorempixel.com/600/700/cats">
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_javascript %}
+    <script>
+        $(document).ready(function(){
+            $('li.name h1').hide();
+            $(document).scroll(function(){
+                if($(this).scrollTop() >= $('div.sticky').position().top){
+                    $('li.name h1').show();
+                }
+                if($(this).scrollTop() < $('div.sticky').position().top){
+                    $('li.name h1').hide();
+                }
+            })
+        })
+    </script>
+{% endblock %}

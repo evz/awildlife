@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="large-3 hide-for-small medium-3 columns">
+        {% if event.image %}
+            <img src="{{ event.image.url }}" />
+        {% else %}
+            <img src="http://lorempixel.com/500/500/cats" />
+        {% endif %}
+    </div>
+
+    <div class="large-9 small-12 medium-9 columns">
+        <h5><a href="{{ url('event_detail',
+                            args=[event.start_time.year,
+                                  event.start_time.month,
+                                  event.start_time.day,
+                                  event.slug] ) }}">
+                {{ event.name }}
+            </a>
+        </h5>
+        <p>{{ event.description }}</p>
+    </div>
+</div>
+

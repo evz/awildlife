@@ -1,0 +1,5 @@
+*.pyc
+.env
+staticfiles
+local_settings.py
+__pycache__
