@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from pygeocoder import Geocoder, GeocoderError
+from recurrence.fields import RecurrenceField
 
 EVENT_CHOICES = (
     ('movement', 'Movement'),
@@ -12,8 +13,11 @@ class Event(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     slug = models.SlugField(max_length=255)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null=True)
+
+    schedule = RecurrenceField(null=True)
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField(null=True)
+
     location = models.ForeignKey('Location')
     contact_info = models.ForeignKey('ContactInfo', null=True)
 
@@ -36,8 +40,6 @@ class Event(models.Model):
                                   choices=EVENT_CHOICES, 
                                   default='movement')
     
-    participants = models.ManyToManyField('Participant', blank=True)
-
     def __str__(self):
         return self.name
 
@@ -50,6 +52,15 @@ class ContactInfo(models.Model):
 
     def __str__(self):
         return self.name
+
+class Registration(models.Model):
+    event_date = models.DateField()
+    event = models.ForeignKey('Event', null=True)
+    participant = models.ForeignKey('Participant', null=True)
+
+    def __str__(self):
+        return '{0} ({1})'.format(self.event.name, 
+                                  self.event_date.strftime('%m/%d/%Y'))
 
 class Participant(models.Model):
     first_name = models.CharField(max_length=255)

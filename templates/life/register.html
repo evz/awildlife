@@ -7,6 +7,34 @@
             <form action="{{ url('register', args=[event.slug]) }}" method="POST">
                 <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken" />
                 <div class="row">
+                    <div class="large-12 columns">
+                        {% if form.event_dates.errors %}
+                            <label class="error"> Choose dates to register for:
+                                <select name="event_dates" class="error" multiple>
+                                    {% for event_date, _ in event_dates %}
+                                        <option value="{{ event_date }}">
+                                            {{ event_date }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            {% for error in form.event_dates.errors %}
+                                <small class="error">{{error}}</small>
+                            {% endfor %}
+                        {% else %}
+                            <label> Choose dates to register for:
+                                <select name="event_dates" multiple>
+                                    {% for event_date, _ in event_dates %}
+                                        <option value="{{ event_date }}">
+                                            {{ event_date }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
                     <div class="large-6 columns">
                         {% if form.first_name.errors %}
                             <label class="error"> First name

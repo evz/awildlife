@@ -6,10 +6,11 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.template.context_processors import csrf
 from awildlife.jinja2 import custom_strftime
+from dateutil import parser as date_parser
 
 from jinja2 import Environment, FileSystemLoader
 
-from .models import Event, Participant
+from .models import Event, Participant, Registration
 
 import os
 import pytz
@@ -21,7 +22,11 @@ class RegisterForm(forms.Form):
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
     email = forms.EmailField()
+    
+    def __init__(self, event_dates, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
 
+        self.fields['event_dates'] = forms.MultipleChoiceField(choices=event_dates)
 
 def index(request):
     now = app_timezone.localize(datetime.now())
@@ -48,11 +53,14 @@ def wild_foods(request):
 def register(request, event_slug):
     
     event = Event.objects.get(slug=event_slug)
+    event_dates = event.schedule.occurrences()
+    event_dates = [(t.strftime('%Y-%m-%d'), t.strftime('%Y-%m-%d')) \
+                      for t in event_dates]
 
     if request.method == 'POST':
         
-        form = RegisterForm(request.POST)
-
+        form = RegisterForm(event_dates, request.POST)
+        
         if form.is_valid():
             
             email = form.cleaned_data['email']
@@ -61,9 +69,22 @@ def register(request, event_slug):
             if created:
                 participant.first_name = form.cleaned_data['first_name']
                 participant.last_name = form.cleaned_data['last_name']
+                participant.save()
             
-            participant.event_set.add(event)
-            participant.save()
+            registrations = []
+
+            for event_date in form.cleaned_data['event_dates']:
+
+                registration, created = \
+                    Registration.objects.get_or_create(participant=participant, 
+                                                       event=event,
+                                                       event_date=event_date)
+                
+                if created:
+                    registration.event_date = date_parser.parse(event_date)
+                    registration.save()
+
+                registrations.append(registration)
 
             sender = event.contact_info.email
             recipients = [email, event.contact_info.email]
@@ -72,7 +93,9 @@ def register(request, event_slug):
             loader = FileSystemLoader(os.path.join(settings.BASE_DIR, 'templates'))
             env = Environment(loader=loader)
             env.filters['nice_datetime'] = custom_strftime
-            email_context = {'event': event, 'participant': participant}
+            email_context = {'event': event, 
+                             'participant': participant, 
+                             'registrations': registrations}
 
             text_template = env.get_template('email/register.txt')
             html_template = env.get_template('email/register.html')
@@ -89,9 +112,9 @@ def register(request, event_slug):
             messages.add_message(request, messages.INFO, flash_message) 
             return HttpResponseRedirect('/')
     else:
-        form = RegisterForm()
+        form = RegisterForm(event_dates)
     
-    context = {'form': form, 'event': event}
+    context = {'form': form, 'event': event, 'event_dates': event_dates}
     context.update(csrf(request))
 
     return render(request, 'life/register.html', context)

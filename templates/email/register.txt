@@ -4,6 +4,6 @@ This message confirms that you are registered for {{ event.name }} with A Wild
 Life. If you have any questions about the event or need to change your
 registration info, contact {{ event.contact_info.name }} at {{ event.contact_info.email }}.
 
-Thanks and see you on {{ event.start_time|nice_datetime('%A the {S}') }}!
+Thanks and see you on {% for r in registrations %}{% if not loop.last %}{{ r.event_date|nice_datetime('%B {S}, ')}}{% else %}{{ r.event_date|nice_datetime('and %B {S}!')}}{% endif %}{% endfor %}
 
 - A Wild Life

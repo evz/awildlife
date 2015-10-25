@@ -3,6 +3,9 @@ from .models import Event, Participant, Location, ContactInfo
 
 class EventAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
+    exclude = ('eventbrite_url',
+               'image_height',
+               'image_width',)
 
 class ParticipantAdmin(admin.ModelAdmin):
     pass

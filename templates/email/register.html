@@ -5,6 +5,8 @@ Life. If you have any questions about the event or need to change your
 registration info, contact {{ event.contact_info.name }} at
 {{ event.contact_info.email }}.</p>
 
-<p>Thanks and see you on {{ event.start_time|nice_datetime('%A the {S}') }}!</p>
+<p>
+Thanks and see you on the {%- for r in registrations %}{% if not loop.last %}{{ r.event_date|nice_datetime('%B {S}, ')}} {% else %}{{ r.event_date|nice_datetime('and %B {S}!')}}{% endif %}{% endfor %}
+</p>
 
 <p>- A Wild Life</p>
