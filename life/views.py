@@ -5,6 +5,10 @@ from django import forms
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.template.context_processors import csrf
+from django.contrib.auth import authenticate, \
+    login as django_login, logout as django_logout
+from django.contrib.auth.decorators import login_required
+
 from awildlife.jinja2 import custom_strftime
 from dateutil import parser as date_parser
 
@@ -119,3 +123,29 @@ def register(request, event_slug):
 
     return render(request, 'life/register.html', context)
 
+@login_required
+def events_admin(request):
+    return render(request, 'life/events_admin.html', {'events': Event.objects.all()})
+
+def login(request):
+    
+    error = None
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            if user.is_active:
+                django_login(request, user)
+                return HttpResponseRedirect('/events-admin/')
+        else:
+            error = 'Username or password are incorrect' 
+    
+    return render(request, 'life/login.html', {'error': error})
+
+def logout(request):
+    django_logout(request)
+    messages.add_message(request, messages.INFO, 'Successfully logged out!') 
+    return HttpResponseRedirect('/')

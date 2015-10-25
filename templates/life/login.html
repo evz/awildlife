@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block body %}
+    <br />
+    <div class="row">
+        <div class="large-6 small-12 large-centered columns">
+            <h1>Login</h1>
+            {% if error %}
+                <div data-alert class="alert-box alert radius">
+                    {{ error }}
+                    <a href="#" class="close">&times;</a>
+                </div>
+            {% endif %}
+            <form action="{{ url('login') }}" method="POST">
+                <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken" />
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label> User name
+                            <input type="text" name="username" />
+                        </label>
+                    </div>
+                    <div class="large-12 columns">
+                        <label> Password
+                            <input type="password" name="password" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label> &nbsp;
+                            <input type="submit" value="Go!" class="button expand radius success" />
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

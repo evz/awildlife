@@ -72,6 +72,13 @@
                             <a href="{{ url('about') }}">About</a>
                         </h2>
                     </li>
+                    {% if request.user.is_authenticated() %}
+                        <li>
+                            <h2>
+                                <a href="{{ url('logout') }}">Logout</a>
+                            </h2>
+                        </li>
+                    {% endif %}
                 </ul>
             </section>
         </nav>
@@ -84,7 +91,6 @@
         </div>
         {% endfor %}
     {% endif %}
-
     {% block body %}{% endblock %}
     <div class="row">
         <div class="large-12 columns">

@@ -21,5 +21,8 @@ urlpatterns = [
 
     url(r'^register/(?P<event_slug>.*)/$', views.register, name='register'),
 
+    url(r'^login/$', views.login, name='login'),
+    url(r'^logout/$', views.logout, name='logout'),
+    url(r'^events-admin/$', views.events_admin, name='events_admin'),
     url(r'^$', views.index, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
