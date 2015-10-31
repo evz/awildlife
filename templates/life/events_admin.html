@@ -4,7 +4,7 @@
     <div class="row">
         <div class="large-12 columns">
             <hr>
-            {% for event in events %}
+            {% for event, event_info in events.items() %}
                 {% include 'partials/event_admin.html' %}
                 {% if not loop.last or loop.length == 1 %}
                     <hr />

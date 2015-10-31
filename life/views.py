@@ -1,3 +1,6 @@
+import itertools
+from operator import attrgetter
+from collections import OrderedDict
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -125,7 +128,23 @@ def register(request, event_slug):
 
 @login_required
 def events_admin(request):
-    return render(request, 'life/events_admin.html', {'events': Event.objects.all()})
+    
+    events = {}
+    for event in Event.objects.all():
+
+        event_registrations = Registration.objects\
+                                          .filter(event=event)\
+                                          .order_by('event_date')
+        
+        grouper = itertools.groupby(event_registrations, 
+                                    key=attrgetter('event_date'))
+        
+        events[event] = OrderedDict()
+        for event_date, registrations in grouper:
+            registrations = list(registrations)
+            events[event][event_date] = [r.participant for r in registrations]
+        
+    return render(request, 'life/events_admin.html', {'events': events})
 
 def login(request):
     
