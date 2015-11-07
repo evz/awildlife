@@ -6,3 +6,4 @@ jinja2==2.8
 pillow==3.0.0
 pytz==2015.6
 django-recurrence==1.2.0
+django-phonenumber-field==0.7.2

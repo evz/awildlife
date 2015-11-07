@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 
 from awildlife.jinja2 import custom_strftime
 from dateutil import parser as date_parser
+from phonenumber_field.formfields import PhoneNumberField
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -21,7 +22,7 @@ from .models import Event, Participant, Registration
 
 import os
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app_timezone = pytz.timezone(settings.TIME_ZONE)
 
@@ -29,33 +30,60 @@ class RegisterForm(forms.Form):
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
     email = forms.EmailField()
+    phone = PhoneNumberField(required=False)
     
     def __init__(self, event_dates, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         self.fields['event_dates'] = forms.MultipleChoiceField(choices=event_dates)
 
+def getOccurrences(events, start, end):
+    upcoming_events = []
+    for event in events:
+        upcoming = event.schedule.between(start, end, inc=True)
+        if upcoming:
+            for occurrence in upcoming:
+                upcoming_events.append((event, occurrence,))
+
+    upcoming_events = sorted(upcoming_events, key=lambda x: x[1])
+    
+    return upcoming_events
+
 def index(request):
-    now = app_timezone.localize(datetime.now())
-    events = Event.objects.filter(start_time__gte=now).order_by('start_time')
+    now = datetime.now()
+    in_a_month = now + timedelta(days=30)
+    
+    events = Event.objects.all()
+    upcoming_events = getOccurrences(events, now, in_a_month)
+
     user_messages = messages.get_messages(request)
-    return render(request, 'life/index.html', {'events': events, 'messages': user_messages})
+
+    context = {
+        'events': upcoming_events, 
+        'messages': user_messages
+    }
+
+    return render(request, 'life/index.html', context)
 
 def movement(request):
     
-    events = Event.objects\
-                  .filter(event_type='movement')\
-                  .order_by('-start_time')
+    now = datetime.now()
+    in_three_months = now + timedelta(days=90)
+    
+    events = Event.objects.filter(event_type='movement')
+    upcoming_events = getOccurrences(events, now, in_three_months)
 
-    return render(request, 'life/movement.html', {'events': events})
+    return render(request, 'life/movement.html', {'events': upcoming_events})
 
 def wild_foods(request):
     
-    events = Event.objects\
-                  .filter(event_type='wild_foods')\
-                  .order_by('-start_time')
+    now = datetime.now()
+    in_three_months = now + timedelta(days=90)
+    
+    events = Event.objects.filter(event_type='wild_foods')
+    upcoming_events = getOccurrences(events, now, in_three_months)
 
-    return render(request, 'life/wild_foods.html', {'events': events})
+    return render(request, 'life/wild_foods.html', {'events': upcoming_events})
 
 def register(request, event_slug):
     
@@ -121,9 +149,14 @@ def register(request, event_slug):
     else:
         form = RegisterForm(event_dates)
     
-    context = {'form': form, 'event': event, 'event_dates': event_dates}
+    context = {
+        'form': form, 
+        'event': event, 
+        'event_dates': event_dates, 
+    }
+    
     context.update(csrf(request))
-
+    
     return render(request, 'life/register.html', context)
 
 @login_required

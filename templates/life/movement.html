@@ -6,7 +6,7 @@
             <h1>Movement classes</h1>
             <p>Description of what this is all about</p>
             <hr />
-            {% for event in events %}
+            {% for event, occurrence in events %}
                 {% include 'partials/event_listing.html' %}
                 {% if not loop.last or loop.length == 1 %}
                     <hr />

@@ -37,8 +37,8 @@
                 <div class="row">
                     <div class="large-6 columns">
                         {% if form.first_name.errors %}
-                            <label class="error"> First name
-                                <input type="text" class="error" name="first_name" />
+                            <label class="error"> First name 
+                                <input type="text" class="error" name="first_name" value="{{ form.data.first_name }}" />
                             </label>
                             {% for error in form.first_name.errors %}
                                 <small class="error">{{ error }}</small>
@@ -52,7 +52,7 @@
                     <div class="large-6 columns">
                         {% if form.last_name.errors %}
                             <label class="error"> Last name
-                                <input type="text" class="error" name="last_name" />
+                                <input type="text" class="error" name="last_name" value="{{ form.data.last_name }}" />
                             </label>
                             {% for error in form.last_name.errors %}
                                 <small class="error">{{ error }}</small>
@@ -65,10 +65,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="large-12 columns">
+                    <div class="large-6 columns">
                         {% if form.email.errors %}
                             <label class="error"> Email
-                                <input type="text" class="error" name="email" />
+                                <input type="text" class="error" name="email" value="{{ form.data.email }}" />
                             </label>
                             {% for error in form.email.errors %}
                                 <small class="error">{{ error }}</small>
@@ -76,6 +76,20 @@
                         {% else %}
                             <label> Email
                                 <input type="text" name="email" />
+                            </label>
+                        {% endif %}
+                    </div>
+                    <div class="large-6 columns">
+                        {% if form.phone.errors %}
+                            <label class="error"> Phone number
+                                <input type="text" class="error" name="phone" value="{{ form.data.phone }}" />
+                            </label>
+                            {% for error in form.phone.errors %}
+                                <small class="error">{{ error }}</small>
+                            {% endfor %}
+                        {% else %}
+                            <label> Phone number
+                                <input type="text" name="phone" />
                             </label>
                         {% endif %}
                     </div>
